@@ -6,7 +6,6 @@ Source snapshot of the two components used for text-conditioned G1 motion genera
 | --- | --- |
 | Motion generation: BP-MVAE, duration-adaptive latent diffusion, frame-level EOS | [TextOpRobotMDAR](TextOpRobotMDAR/README.md) |
 | GRIT tracking, simulation and robot deployment | [GRIT_teleop_deploy](GRIT_teleop_deploy/README.md) · [中文说明](GRIT_teleop_deploy/README_ZH.md) |
-| Code/paper alignment and reconstruction assumptions | [Consistency record](TextOpRobotMDAR/PAPER_CONSISTENCY_AUDIT.md) |
 
 ## Training configuration
 
