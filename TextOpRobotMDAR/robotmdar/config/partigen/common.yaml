@@ -1,0 +1,69 @@
+# @package _global_
+# Structure only. Experiment hyperparameters MUST be supplied by the researcher.
+defaults:
+  - /base/hydra
+  - /skeleton/g1
+  - _self_
+
+project_name: PartiGen
+expname: PartiGen
+task: train-partigen
+stage: ???
+seed: ???
+device: cuda
+timestamp: ${now:%Y%m%d_%H%M%S}
+base_dir: ${hydra:runtime.cwd}/logs
+experiment_dir: ${base_dir}/${project_name}/${expname}/${task}-${timestamp}
+
+data:
+  # Retain the existing server asset conventions.
+  datadir: ./dataset/HumanML3D-G1-23DOF-30fps
+  action_statistics_path: ./dataset/HumanML3D-G1-23DOF-30fps/action_statistics.json
+  history_len: 2
+  future_len: ???  # Explicitly select the segment or duration experiment.
+
+vae:
+  _target_: robotmdar.partigen.networks.BPMotionVAE
+  nfeats: 57
+  latent_dim: [1, 128]
+  h_dim: 512
+  ff_size: 1024
+  num_layers: 9
+  num_heads: 4
+  dropout: ???
+
+ckpt:
+  vae: null
+  dar: null
+
+sampling:
+  max_frames: 320
+
+train:
+  batch_size: ???
+  eval_batch_size: ???
+  lr: ???
+  lr_schedule: ???
+  betas: ???
+  eps: ???
+  weight_decay: ???
+  stages: ???
+  max_grad_norm: ???
+  save_every: ???
+  eval_every: ???
+  eval_steps: ???
+  rec_weight: ???
+  kinematic_weight: ???
+  geometry_weights:
+    body_trans: ???
+    body_rot: ???
+    dof_pos: ???
+    dof_vel: ???
+    foot_contact: ???
+    joints_delta: ???
+    trans_delta: ???
+    orient_delta: ???
+    dof_delta: ???
+    smooth: ???
+    drift_yaw: ???
+    drift_xy: ???

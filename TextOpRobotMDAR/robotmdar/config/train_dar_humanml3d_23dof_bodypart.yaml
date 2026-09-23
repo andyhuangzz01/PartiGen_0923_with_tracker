@@ -1,0 +1,48 @@
+# @package _global_
+# Legacy experiment. The paper entry point is train_partigen_dar.
+# Training configuration for HumanML3D-G1-23DOF-30fps DAR with Body Part VAE
+#
+# This configuration trains a DAR (Denoising AutoRegressive) model using
+# a pre-trained Body Part Aware VAE as the motion encoder/decoder.
+#
+# Usage:
+#   1. First train the Body Part VAE:
+#      python -m robotmdar.train.train_mvae --config-name train_mvae_humanml3d_23dof_bodypart
+#   
+#   2. Then train DAR with the trained VAE:
+#      python -m robotmdar.train.train_dar --config-name train_dar_humanml3d_23dof_bodypart
+#
+# Note: Update ckpt.vae path to point to your trained Body Part VAE checkpoint
+
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps
+  - train/dar
+  - vae: def  # 改用普通 VAE,不用 body part
+  - _self_
+
+# Experiment name
+expname: HumanML3D-G1-23DOF-BodyPart-DAR
+task: train-dar
+
+# Override nfeats to match dataset (57 dims for 23DOF)
+nfeats: 57
+
+# Number of CPU workers for data loading
+num_workers: 0
+
+# VAE checkpoint - UPDATE THIS PATH to your trained Body Part VAE
+# Example: logs/RobotMDAR-BodyPart/HumanML3D-G1-23DOF-BodyPart-VAE/train-mvae-YYYYMMDD_HHMMSS/ckpt_100000.pth
+ckpt:
+  vae: logs/RobotMDAR/HumanML3D-G1-23DOF-BodyPart-VAE/train-mvae-20260101_171030/ckpt_100000.pth
+  dar: null
+
+# WandB logging configuration
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      project: 23dofMVAE
+      entity: null
+      name: ${expname}

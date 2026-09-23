@@ -1,0 +1,31 @@
+
+defaults:
+  - _self_
+  - base/hydra
+  - data/babel
+  - vae/def
+  - denoiser/def
+  - diffusion/def
+  - train/mvae
+  - skeleton/g1
+
+project_name: RobotMDAR
+expname: TEST
+task: ???
+seed: 0
+device: "cuda"
+timestamp: ${now:%Y%m%d_%H%M%S}
+base_dir: ${hydra:runtime.cwd}/logs
+experiment_dir: ${base_dir}/${project_name}/${expname}/${task}-${timestamp}
+
+nfeats: ${data.nfeats}
+
+# Foot DOF indices for foot loss calculation
+foot_dof_indices:
+  left_foot: 5
+  right_foot: 11
+
+ckpt:
+  vae: null
+  dar: null
+  load_cfg: null

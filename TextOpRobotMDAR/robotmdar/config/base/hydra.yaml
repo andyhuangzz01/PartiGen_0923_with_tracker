@@ -1,0 +1,13 @@
+# @package _global_
+
+hydra: # So hydra will put your config info in the same dir as your checkpoints
+  run:
+    dir: ${experiment_dir}
+  sweep:
+    dir: ${experiment_dir}
+  job:
+    chdir: False
+  job_logging:
+    version: 1
+    root: null
+    disable_existing_loggers: false

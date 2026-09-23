@@ -1,0 +1,27 @@
+# Duration-Conditioned Denoiser Configuration
+# Minimal version that can load pretrained DAR weights
+
+_target_: robotmdar.model.duration_denoiser_minimal.DurationConditionedDenoiserTransformerMinimal
+
+# Must match pretrained DAR architecture
+h_dim: 512
+ff_size: 1024
+num_layers: 8
+num_heads: 4
+dropout: 0.1
+activation: gelu
+clip_dim: 512
+
+# Set dynamically based on data config
+history_shape: 
+  - 2
+  - ${...nfeats}
+noise_shape: [1, 128]
+
+# Duration conditioning
+max_frames: 300      # Maximum motion length (10s at 30fps)
+fps: 30.0
+duration_cond_mask_prob: 0.1  # Probability of masking duration for CFG
+
+# Classifier-free guidance for text
+cond_mask_prob: 0.1

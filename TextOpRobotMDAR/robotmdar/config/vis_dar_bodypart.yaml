@@ -1,0 +1,37 @@
+# @package _global_
+# Visualization configuration for Body Part DAR model
+# 
+# Usage:
+#   python -m robotmdar.eval.vis_dar --config-name=vis_dar_bodypart
+#
+# This will load the Body Part VAE and DAR checkpoints and visualize motion generation
+
+defaults:
+  - train_dar_humanml3d_23dof_bodypart  # Use body part DAR configuration
+  - _self_
+
+expname: vis-bodypart
+task: vis-dar
+
+# Generation mode settings
+use_autoregressive: true   # Use autoregressive generation (realistic deployment)
+use_full_sample: true      # Use full DDPM sampling for better quality
+guidance_scale: 5.0        # Classifier-free guidance scale (higher = more text-conditioned)
+
+# Checkpoint paths - update these to your trained checkpoints
+ckpt:
+  vae: logs/RobotMDAR/HumanML3D-G1-23DOF-BodyPart-VAE/train-mvae-20260101_171030/ckpt_100000.pth
+  dar: logs/RobotMDAR/HumanML3D-G1-23DOF-BodyPart-DAR/train-dar-20260102_031005/ckpt_20000.pth
+
+# Disable logging platforms for visualization
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.NoPlatform
+
+# Visualization settings
+data:
+  batch_size: 1  # Visualize one sequence at a time
+
+# Optional: specify which validation samples to visualize
+# vis_indices: [0, 1, 2, 3, 4]  # Uncomment to select specific samples

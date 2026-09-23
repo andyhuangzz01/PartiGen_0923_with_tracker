@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+  - vis_dar
+  - _self_
+
+task: freq-dar
+
+# Benchmark settings
+num_iterations: 100      # Number of benchmark iterations
+warmup_iterations: 10    # Number of warmup iterations
+text_prompt: "walk forward"  # Default text prompt for benchmarking
+
+# Sampling settings
+use_full_sample: false   # false for single-step (faster), true for full DDPM sampling
+
+# Override data settings for frequency testing
+data:
+  val:
+    batch_size: 1  # Fixed batch size for frequency testing

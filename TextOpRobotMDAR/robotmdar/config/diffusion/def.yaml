@@ -1,0 +1,36 @@
+num_timesteps: 5    # 10
+
+model:
+  _target_: robotmdar.diffusion.respace.SpacedDiffusion
+  use_timesteps: 
+    _target_: robotmdar.diffusion.respace.space_timesteps
+    num_timesteps: ${...num_timesteps}
+    section_counts: 
+      - ${..num_timesteps}
+
+  betas: 
+    _target_: robotmdar.diffusion.gaussian_diffusion.get_named_beta_schedule
+    schedule_name: "cosine"
+    num_diffusion_timesteps: ${...num_timesteps}
+
+  model_mean_type: 
+    _target_: robotmdar.dtype.enum.make_enum
+    enum_path: robotmdar.diffusion.gaussian_diffusion.ModelMeanType
+    name: START_X
+
+  model_var_type: 
+    _target_: robotmdar.dtype.enum.make_enum
+    enum_path: robotmdar.diffusion.gaussian_diffusion.ModelVarType
+    name: FIXED_SMALL
+
+  loss_type: 
+    _target_: robotmdar.dtype.enum.make_enum
+    enum_path: robotmdar.diffusion.gaussian_diffusion.LossType
+    name: MSE
+
+  rescale_timesteps: false       # false
+
+schedule_sampler:
+  _target_: robotmdar.diffusion.resample.create_named_schedule_sampler
+  name: "uniform"
+  diffusion: ${..model}

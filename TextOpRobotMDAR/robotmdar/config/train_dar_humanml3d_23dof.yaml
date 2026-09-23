@@ -1,0 +1,32 @@
+# @package _global_
+# Training configuration for HumanML3D-G1-23DOF-30fps DAR with trained VAE
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps
+  - train/dar
+  - _self_
+
+expname: HumanML3D-G1-23DOF-30fps-DAR
+task: train-dar
+
+# Override nfeats to match dataset (57 dims for 23DOF)
+nfeats: 57
+
+# Number of CPU workers for data loading
+# Set to 0 due to /dev/shm limitation (only 64MB)
+# To use multi-worker, run: sudo mount -o remount,size=32G /dev/shm
+num_workers: 0
+
+# VAE checkpoint from your trained model
+ckpt:
+  vae: /inspire/hdd/project/robot-hardware/gaoyue-p-gaoyue/hcx/TextOp/logs/RobotMDAR/HumanML3D-G1-23DOF-VAE/train-mvae-20251231_060449/ckpt_100000.pth
+  dar: null
+
+# WandB logging configuration
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      project: 23dofMLD
+      entity: null

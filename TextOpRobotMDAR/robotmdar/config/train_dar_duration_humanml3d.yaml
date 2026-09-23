@@ -1,0 +1,38 @@
+# @package _global_
+# Training configuration for Duration-Conditioned DAR (Scheme 4)
+# Based on train_dar_humanml3d.yaml but uses duration-conditioned denoiser
+
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps_duration  # Uses duration-aware dataset
+  - train/dar
+  - denoiser/duration_conditioned_minimal
+  - _self_
+
+expname: HumanML3D-G1-23DOF-30fps-DurationDAR
+task: train-dar-duration
+
+# Override nfeats to match dataset (57 dims for 23DOF)
+nfeats: 57
+
+# Number of CPU workers for data loading
+num_workers: 0
+
+# Duration conditioning parameters
+max_frames: 300  # Maximum motion length (10s at 30fps)
+duration_mask_prob: 0.1  # For classifier-free guidance on duration
+
+# VAE checkpoint - required
+ckpt:
+  vae: null  # Set this to your trained MVAE checkpoint path
+  dar: null  # Optional: pretrained DAR for fine-tuning
+
+# WandB configuration
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      save_dir: ${..save_dir}
+      project: 23dofMLD
+      name: ${expname}-${now:%Y%m%d_%H%M%S}

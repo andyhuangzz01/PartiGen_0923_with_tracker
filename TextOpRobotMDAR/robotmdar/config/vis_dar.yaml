@@ -1,0 +1,18 @@
+# @package _global_
+defaults:
+  - train_dar
+  - _self_
+
+expname: vis
+task: vis-dar
+
+# Generation mode: false for teacher forcing, true for autoregressive
+use_autoregressive: true
+# Full DDPM sampling: false for single step (default), true for full sampling loop
+use_full_sample: true
+guidance_scale: 5.0
+
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.NoPlatform

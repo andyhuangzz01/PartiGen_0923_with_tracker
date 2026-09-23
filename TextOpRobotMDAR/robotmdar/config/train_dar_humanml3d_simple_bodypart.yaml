@@ -1,0 +1,32 @@
+# @package _global_
+# Training configuration for HumanML3D-G1-23DOF-30fps DAR with Simple Body Part VAE
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps
+  - train/dar
+  - vae/simple_body_part_vae  # Use Simple Body Part VAE architecture
+  - _self_
+
+expname: HumanML3D-G1-23DOF-SimpleBodyPart-DAR
+task: train-dar
+
+# Override nfeats to match dataset (57 dims for 23DOF)
+nfeats: 57
+
+# Number of CPU workers for data loading
+num_workers: 0
+
+# Simple Body Part VAE checkpoint - update this path after training
+ckpt:
+  vae: null  # Set to your trained Simple Body Part VAE checkpoint path
+  dar: null
+
+# WandB logging configuration
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      save_dir: ${..save_dir}
+      project: 23dofMLD
+      name: ${expname}-${now:%Y%m%d_%H%M%S}

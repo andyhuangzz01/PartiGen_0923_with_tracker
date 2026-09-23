@@ -1,0 +1,13 @@
+# @package _global_
+defaults:
+  - _self_
+
+task: generate-partigen
+device: cuda
+checkpoint: ???
+# torch.save({'history': normalized_Bx2x57, 'text': clip_Bx512}, path)
+inputs: ???
+output: ???
+max_frames: 320
+guidance_scale: 5.0
+eos_threshold: 0.9

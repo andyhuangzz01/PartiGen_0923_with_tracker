@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+  - base
+  - _self_
+
+expname: vis
+task: vis-mvae
+
+
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.NoPlatform
+
+data:
+  batch_size: 16

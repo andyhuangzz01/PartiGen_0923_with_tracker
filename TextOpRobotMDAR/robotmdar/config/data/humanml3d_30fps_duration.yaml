@@ -1,0 +1,43 @@
+# Configuration for HumanML3D-G1-23DOF-30fps dataset with duration return
+# Based on humanml3d_30fps.yaml but uses DurationAwareDataset
+skeleton: ${..skeleton}
+
+nfeats: 57 # V3: orientation(5) + contact(2) + local_displacement(3) + height(1) + q(23) + delta_q(23)
+history_len: 2
+future_len: 8
+num_primitive: 8
+batch_size: 512
+
+weighted_sample: false
+frame_weight: false
+use_weighted_meanstd: false
+
+action_statistics_path: ./dataset/HumanML3D-G1-23DOF-30fps/action_statistics.json
+datadir: ./dataset/HumanML3D-G1-23DOF-30fps
+
+common: &common
+  # Use duration-aware dataset instead of original
+  _target_: robotmdar.dataloader.data_duration.DurationAwareDataset
+  return_duration: true
+  
+  datadir: ${..datadir}
+  action_statistics_path: ${..action_statistics_path}
+
+  robot_cfg: ${skeleton}
+  device: cuda
+  nfeats: ${..nfeats}
+  history_len: ${..history_len}
+  future_len: ${..future_len}
+  num_primitive: ${..num_primitive}
+  batch_size: ${..batch_size}
+  weighted_sample: ${..weighted_sample}
+  frame_weight: ${..frame_weight}
+  use_weighted_meanstd: ${..use_weighted_meanstd}
+
+train:
+  <<: *common
+  split: train
+
+val:
+  <<: *common
+  split: val

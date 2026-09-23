@@ -1,0 +1,24 @@
+# @package _global_
+defaults:
+  - partigen/common
+  - _self_
+
+stage: mvae
+train:
+  kl_weight: ???
+  # Zero-based activation stage for each loss. The paper gives qualitative
+  # phases, not an exact per-term activation/ramping implementation.
+  loss_start_stage:
+    kl: ???
+    body_trans: ???
+    body_rot: ???
+    dof_pos: ???
+    dof_vel: ???
+    foot_contact: ???
+    joints_delta: ???
+    trans_delta: ???
+    orient_delta: ???
+    dof_delta: ???
+    smooth: ???
+    drift_yaw: ???
+    drift_xy: ???

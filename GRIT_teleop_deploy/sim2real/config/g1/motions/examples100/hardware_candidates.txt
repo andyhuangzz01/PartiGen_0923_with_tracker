@@ -1,0 +1,23 @@
+# Initial hardware candidates selected from the MuJoCo batch results.
+# Format: tier index description
+# Always use a gantry/physical support and a trained emergency-stop operator.
+tier1 96 standing with slight arm motion
+tier1 22 standing with hands held at waist level
+tier1 55 standing left-hand stirring motion
+tier1 56 standing right-hand T-shape gesture
+tier1 61 standing forward reach with left hand
+tier1 08 standing full upper-body stretch
+tier1 90 standing upper-body twist
+
+# Try tier2 only after every chosen tier1 motion is visually verified.
+tier2 02 one forward step
+tier2 10 slow small forward steps
+tier2 16 slow forward walk and stop
+tier2 23 right/left side steps
+tier2 27 slow forward walk
+tier2 37 slow backward walk
+tier2 40 right strafing steps
+tier2 48 slow forward walk and stop
+tier2 19 walk in circle
+tier2 12 walk
+tier2 47 jump

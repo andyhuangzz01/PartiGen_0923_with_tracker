@@ -1,0 +1,30 @@
+# @package _global_
+# Training configuration for standard HumanML3D-G1-23DOF-30fps MVAE (NO body part attention)
+# Use this as a baseline before experimenting with body part attention
+
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps
+  - train/mvae
+  - vae: def  # Standard VAE without body part attention
+  - _self_
+
+# Experiment name
+expname: HumanML3D-G1-23DOF-Standard-VAE-v2
+task: train-mvae
+
+# Override nfeats to match dataset (57 dims for 23DOF)
+nfeats: 57
+
+# Number of CPU workers for data loading
+num_workers: 0
+
+# WandB logging configuration
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      project: 23dofMVAE
+      entity: null
+      name: ${expname}

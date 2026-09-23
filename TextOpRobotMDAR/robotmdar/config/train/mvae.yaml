@@ -1,0 +1,62 @@
+opt:
+  lr: ${..manager.learning_rate}
+
+manager:
+  _target_: robotmdar.train.manager.MVAEManager
+  stages:
+    - 15000
+    - 25000
+    - 30000
+    - 30000
+
+  use_rollout: False        # True
+
+  use_static_pose: True
+  static_prob: 0.001
+  static_perturbation_scale: 0.0
+
+  save_every: 20000
+  eval_every: 2000
+  eval_steps: 10
+
+  device: ${...device}
+  save_dir: ${...experiment_dir}
+
+  learning_rate: 1e-4
+  anneal_lr: True
+  max_grad_norm: 1.0
+
+  # EMA settings
+  use_ema: False
+  ema_decay: 0.999
+
+  loss_weight:
+    rec: 1.0          # 1.0
+    kl: 1e-4          # 1e-4
+    body_trans: 0.05    # 0.05
+    body_rot: 1e-2   # 1e-2
+    dof_pos: 0.03     # 0.03
+    dof_vel: 1e-5     # 1e-5
+    foot_contact: 0.01     # 0.01
+
+    fk_joints_rec: 1.0
+    joints_consistency: 1.0
+    joints_delta: 1.0
+    trans_delta: 1.0
+    orient_delta: 1.0
+
+    dof_delta: 1.0
+    smooth: 0.1
+
+    quantize_rot: 0.0
+    quantize_trans: 0.0
+
+    drift_yaw: 0.3
+    drift_xy: 0.3
+
+  ckpt: ${...ckpt}
+
+  platform:
+    _target_: robotmdar.train.train_platforms.TensorboardPlatform
+    save_dir: ${..save_dir}
+

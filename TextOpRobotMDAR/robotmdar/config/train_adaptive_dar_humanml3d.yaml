@@ -1,0 +1,101 @@
+# @package _global_
+# Training configuration for Adaptive Length DAR (内置时长预测)
+
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps
+  - train/dar
+  - _self_
+
+expname: HumanML3D-G1-23DOF-Adaptive-DAR
+task: train-dar
+
+# Override nfeats
+nfeats: 57
+
+# Batch size (大幅提升)
+batch_size: 512
+
+# CPU workers
+num_workers: 0
+
+# 覆盖数据集路径
+data:
+  datadir: /inspire/hdd/project/robot-hardware/gaoyue-p-gaoyue/hcx/TextOp/dataset/HumanML3D-G1-23DOF-30fps
+  action_statistics_path: /inspire/hdd/project/robot-hardware/gaoyue-p-gaoyue/hcx/TextOp/dataset/HumanML3D-G1-23DOF-30fps/action_statistics.json
+  batch_size: 512
+
+# 覆盖 skeleton 资源路径 (使用 Hydra 运行时目录)
+skeleton:
+  asset:
+    assetRoot: ${hydra:runtime.cwd}/description/
+    assetFileName: robots/g1/g1_23dof.xml
+
+# VAE checkpoint (使用绝对路径)
+ckpt:
+  vae: /inspire/hdd/project/robot-hardware/gaoyue-p-gaoyue/hcx/TextOp/logs/RobotMDAR/HumanML3D-G1-23DOF-VAE/train-mvae-20251231_060449/ckpt_100000.pth
+  dar: null  # 从零训练
+
+# Denoiser配置 (使用 Adaptive Length Denoiser)
+denoiser:
+  _target_: robotmdar.model.adaptive_length_denoiser.AdaptiveLengthDenoiser
+  h_dim: 512
+  ff_size: 1024
+  num_layers: 8
+  num_heads: 4
+  dropout: 0.1
+  activation: gelu
+  clip_dim: 512
+  history_shape: [2, 57]
+  noise_shape: [1, 128]
+  max_frames: 196
+  fps: 30.0
+  cond_mask_prob: 0.1
+  use_length_predictor: true
+  length_predictor_hidden: 512
+
+# 训练策略
+train:
+  manager:
+    _target_: robotmdar.train.manager.DARManager
+    stages:
+      - 50000
+      - 50000
+      - 50000
+      - 150000  # 总共 300k steps
+    
+    use_rollout: false
+    use_static_pose: false
+    static_prob: 0.001
+    use_full_sample: false
+    
+    save_every: 10000
+    eval_every: 5000
+    eval_steps: 10
+    
+    device: ${device}
+    save_dir: ${experiment_dir}
+    
+    learning_rate: 0.0001
+    anneal_lr: true  # Cosine annealing
+    max_grad_norm: 1.0
+    
+    use_ema: false
+    
+    loss_weight:
+      rec: 1.0
+      kl: 1e-4
+      latent_rec: 1.0
+    
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      project: TextOp-Adaptive-DAR
+      entity: null
+
+# Length Predictor 配置
+length_predictor:
+  use_loss: true
+  loss_weight: 0.1
+  pretrained_ckpt: null  # 暂时设为 null,如果有检查点再更新
+  freeze: false  # 联合训练

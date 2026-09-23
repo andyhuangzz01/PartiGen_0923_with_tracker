@@ -1,0 +1,40 @@
+# @package _global_
+# Training configuration for DAR with Body Part annotations (Weighted Sampling)
+defaults:
+  - base
+  - skeleton/g1_29dof
+  - data/body_part_annotated  # 使用自定义的Body Part数据配置
+  - train/dar
+  - _self_
+
+expname: G1-HML3D-DAR-BodyPart-Weighted
+task: train-dar-body-part-weighted
+
+# Override nfeats to match VAE checkpoint (69 dims)
+nfeats: 69
+
+# VAE checkpoint path
+ckpt:
+  vae: logs/RobotMDAR/HumanML3D-G1-29DOF-VAE-30fps/train-mvae-20251212_084144/ckpt_100000.pth
+  dar: null
+  load_cfg: null
+
+# Body Part Weights for weighted sampling
+body_part_weights:
+  head: 2.0
+  left_arm: 1.5
+  right_arm: 1.5
+  torso: 1.0
+  left_leg: 1.2
+  right_leg: 1.2
+  left_hand: 1.8
+  right_hand: 1.8
+
+# Training configuration overrides
+train:
+  manager:
+    learning_rate: 0.0001
+    max_epoch: 100
+    log_interval: 100
+    eval_every: 200
+    save_interval: 5000

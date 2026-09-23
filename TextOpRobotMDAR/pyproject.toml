@@ -1,0 +1,139 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robotmdar"
+version = "0.1.0"
+description = "Robot Motion Diffusion Auto Regressive Model"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Weiji Xie"},
+    {name = "Jiakun Zheng"}
+]
+keywords = ["robotics", "motion", "diffusion", "machine-learning"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Robotics",
+]
+
+dependencies = [
+    "easydict==1.13",
+    "hydra-core==1.3.2",
+    "joblib",
+    "loguru==0.7.3",
+    "loralib==0.1.2",
+    "matplotlib",
+    "mujoco==3.2.3",
+    "numpy==1.24.4",
+    "omegaconf==2.3.0",
+    "scipy==1.10.1",
+    "toolz==1.0.0",
+    "torch",
+    "tqdm==4.66.4",
+    "wandb==0.16.6",
+    'einops==0.8.1',
+    "torch_tensorrt", 
+    "tensorboard"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "ruff>=0.1.0",
+]
+test = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+]
+
+# [project.urls]
+# Homepage = "https://github.com/your-org/RobotMDAR"
+# Repository = "https://github.com/your-org/RobotMDAR.git"
+# Documentation = "https://robotmdar.readthedocs.io/"
+# "Bug Tracker" = "https://github.com/your-org/RobotMDAR/issues"
+
+[project.scripts]
+robotmdar = "robotmdar.cli:main"
+
+# Modern setuptools configuration for src layout
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["robotmdar*"]
+
+[tool.setuptools.package-data]
+"robotmdar" = ["*.yaml", "*.yml", "*.json", "*.txt", "*.md", "config/**/*.yaml"]
+"robotmdar.config" = ["**/*.yaml", "**/*.yml"]
+
+# Pytest configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+
+# Ruff linter configuration
+[tool.ruff]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+select = ["E", "F", "W", "I", "B", "N"]
+ignore = [
+    "I001",     # Import block is un-sorted or un-formatted
+    "F403",     # 'from module import *' used; unable to detect undefined names
+    "F401",     # Module imported but unused
+    "E501",     # Line too long
+    "F541",     # f-string is missing placeholders
+    "W293",     # Blank line contains whitespace
+    "B008",     # Do not perform function calls in argument defaults
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "test/",
+    "scripts/",
+]
+
+# Same as Black.
+line-length = 150
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.8+
+target-version = "py38"

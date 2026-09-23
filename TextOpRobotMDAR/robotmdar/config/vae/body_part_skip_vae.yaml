@@ -1,0 +1,36 @@
+# Body Part Skip VAE Configuration
+# This is a drop-in replacement for the default VAE with body-part-aware attention
+# Use this configuration for training with body part attention mechanism
+
+_target_: robotmdar.model.body_part_mld_vae.BodyPartAutoMldVae
+
+# Standard VAE parameters (same as def.yaml)
+nfeats: ${..nfeats}
+latent_dim: [1, 128]
+h_dim: 512
+ff_size: 1024
+num_layers: 9
+num_heads: 4  # Must be divisible by num_body_parts
+dropout: 0.1
+arch: all_encoder
+normalize_before: false
+activation: gelu
+position_embedding: learned
+
+# Body Part Attention specific parameters
+use_body_part_attention: true
+num_body_parts: 4  # Number of body parts (left_legs, right_legs, torso, upper_body)
+use_kinematic_mask: false  # Set to true to enforce kinematic chain constraints
+
+# Body part configuration for G1 23-DOF robot
+# DOF indices for each body part in the motion feature vector
+# Layout: dof[0:23] where:
+#   - left_leg: hip_pitch, hip_roll, hip_yaw, knee, ankle_pitch, ankle_roll (0-5)
+#   - right_leg: same pattern (6-11)
+#   - torso: waist_yaw, waist_roll, waist_pitch (12-14)
+#   - upper_body: left_arm(4) + right_arm(4) (15-22)
+body_part_config:
+  left_legs: [0, 1, 2, 3, 4, 5]
+  right_legs: [6, 7, 8, 9, 10, 11]
+  torso: [12, 13, 14]
+  upper_body: [15, 16, 17, 18, 19, 20, 21, 22]

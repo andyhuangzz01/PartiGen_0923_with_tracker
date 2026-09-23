@@ -1,0 +1,9 @@
+# @package _global_
+defaults:
+  - base
+  - train/dar
+  - _self_
+
+expname: DAR
+task: train-dar
+

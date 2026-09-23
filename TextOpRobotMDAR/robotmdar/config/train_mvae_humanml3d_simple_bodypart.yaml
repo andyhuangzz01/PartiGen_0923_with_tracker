@@ -1,0 +1,24 @@
+# @package _global_
+# Training configuration for HumanML3D-G1-23DOF-30fps MVAE with Simple Body Part Attention
+defaults:
+  - base
+  - skeleton/g1
+  - data/humanml3d_30fps
+  - train/mvae
+  - vae/simple_body_part_vae  # Use simplified body part attention
+  - _self_
+
+expname: HumanML3D-G1-23DOF-SimpleBodyPart-VAE
+task: train-mvae
+
+# Override nfeats to match dataset (57 dims for 23DOF)
+nfeats: 57
+
+# WandB configuration
+train:
+  manager:
+    platform:
+      _target_: robotmdar.train.train_platforms.WandBPlatform
+      save_dir: ${..save_dir}
+      project: 23dofMVAE
+      name: ${expname}-${now:%Y%m%d_%H%M%S}

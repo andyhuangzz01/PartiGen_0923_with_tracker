@@ -1,0 +1,26 @@
+# @package _global_
+defaults:
+  - partigen/common
+  - diffusion/partigen
+  - _self_
+
+stage: dar
+denoiser:
+  _target_: robotmdar.partigen.networks.DurationAdaptiveDenoiser
+  h_dim: 512
+  ff_size: 1024
+  num_layers: 8
+  num_heads: 4
+  clip_dim: 512
+  history_shape: [2, 57]
+  noise_shape: [1, 128]
+  dropout: ???
+  cond_mask_prob: ???
+  num_timesteps: ${diffusion.num_timesteps}
+  # Only the final hidden width is specified in the paper; choose the first two.
+  eos_hidden_dims: ???
+
+train:
+  latent_weight: ???
+  eos_weight: ???
+  eos_positive_weight: ???

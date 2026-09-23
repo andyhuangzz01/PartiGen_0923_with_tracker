@@ -1,0 +1,40 @@
+# Environments, caches and local publishing work
+.venv/
+.test-deps/
+.publish-work/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Research data, checkpoints and generated outputs are supplied separately.
+dataset/
+datasets/
+logs/
+outputs/
+build/
+build-*/
+*.log
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.pkl
+*.pickle
+*.npy
+*.npz
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.zip
+
+# Vendored runtime .a/.so files are intentionally retained.

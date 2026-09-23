@@ -1,0 +1,40 @@
+# Configuration for HumanML3D-G1-23DOF-30fps dataset
+skeleton: ${..skeleton}
+
+nfeats: 57 # V3: orientation(5) + contact(2) + local_displacement(3) + height(1) + q(23) + delta_q(23)
+history_len: 2
+future_len: 8
+num_primitive: 8
+batch_size: 512
+
+weighted_sample: false  # Disable weighted sampling since action_statistics.json is not available
+frame_weight: false
+use_weighted_meanstd: false
+
+# Update these paths for your dataset
+action_statistics_path: ./dataset/HumanML3D-G1-23DOF-30fps/action_statistics.json
+datadir: ./dataset/HumanML3D-G1-23DOF-30fps
+
+common: &common
+  _target_: robotmdar.dataloader.data.SkeletonPrimitiveDataset
+  datadir: ${..datadir}
+  action_statistics_path: ${..action_statistics_path}
+
+  robot_cfg: ${skeleton}
+  device: cuda
+  nfeats: ${..nfeats}
+  history_len: ${..history_len}
+  future_len: ${..future_len}
+  num_primitive: ${..num_primitive}
+  batch_size: ${..batch_size}
+  weighted_sample: ${..weighted_sample}
+  frame_weight: ${..frame_weight}
+  use_weighted_meanstd: ${..use_weighted_meanstd}
+
+train:
+  <<: *common
+  split: train
+
+val:
+  <<: *common
+  split: val
